@@ -20,6 +20,7 @@
     "php": ">=5.5.0",
     "objective-php/primitives": "dev-master",
     "objective-php/matcher": "dev-master"
+    },
   "require-dev": {
     "objective-php/phpunit-extension": "1.0",
     "phpunit/phpunit": "4.*"

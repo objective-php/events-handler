@@ -27,7 +27,7 @@
   },
   "autoload": {
     "psr-4": {
-      "ObjectivePHP\\": "src/"
+      "ObjectivePHP\\Events\\": "src/"
     }
   }
 }

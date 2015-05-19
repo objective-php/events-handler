@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "da4bb7e0afb4d0a7c29d55b81cd4532f",
+    "hash": "5aa3a2e9fcd5f9b980aea03077aeb9ec",
     "packages": [
         {
             "name": "objective-php/matcher",

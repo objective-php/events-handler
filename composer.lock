@@ -4,25 +4,25 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "5aa3a2e9fcd5f9b980aea03077aeb9ec",
+    "hash": "8f6d0cd10afe2d6a4c51a9558a6d7adc",
     "packages": [
         {
             "name": "objective-php/matcher",
-            "version": "v1.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/objective-php/matcher.git",
-                "reference": "cb7e7bedf52aecb2221293d7dc2d121314424e89"
+                "reference": "10fd96d715f6a47262e1475b054df9236032356c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/objective-php/matcher/zipball/cb7e7bedf52aecb2221293d7dc2d121314424e89",
-                "reference": "cb7e7bedf52aecb2221293d7dc2d121314424e89",
+                "url": "https://api.github.com/repos/objective-php/matcher/zipball/10fd96d715f6a47262e1475b054df9236032356c",
+                "reference": "10fd96d715f6a47262e1475b054df9236032356c",
                 "shasum": ""
             },
             "require": {
-                "objective-php/phpunit-extension": "1.*",
-                "objective-php/primitives": "1.*",
+                "objective-php/phpunit-extension": "~1.0",
+                "objective-php/primitives": "dev-master",
                 "php": ">=5.5.0"
             },
             "require-dev": {
@@ -30,8 +30,8 @@
             },
             "type": "library",
             "autoload": {
-                "psr-0": {
-                    "ObjectivePHP\\Matcher": "src/"
+                "psr-4": {
+                    "ObjectivePHP\\Matcher\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -51,7 +51,7 @@
                 "matcher",
                 "objective php"
             ],
-            "time": "2015-05-18 13:38:20"
+            "time": "2015-05-19 18:14:53"
         },
         {
             "name": "objective-php/phpunit-extension",
@@ -100,16 +100,16 @@
         },
         {
             "name": "objective-php/primitives",
-            "version": "v1.0.1",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/objective-php/primitives.git",
-                "reference": "eda7e71c9e0cbd0dfff30ec5841170da73168774"
+                "reference": "3b892a56226479c93b597d01b15f599f42ad9470"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/objective-php/primitives/zipball/eda7e71c9e0cbd0dfff30ec5841170da73168774",
-                "reference": "eda7e71c9e0cbd0dfff30ec5841170da73168774",
+                "url": "https://api.github.com/repos/objective-php/primitives/zipball/3b892a56226479c93b597d01b15f599f42ad9470",
+                "reference": "3b892a56226479c93b597d01b15f599f42ad9470",
                 "shasum": ""
             },
             "require": {
@@ -121,8 +121,8 @@
             },
             "type": "library",
             "autoload": {
-                "psr-0": {
-                    "ObjectivePHP\\Primitives": "src/"
+                "psr-4": {
+                    "ObjectivePHP\\Primitives\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -147,7 +147,7 @@
                 "objective php",
                 "primitives"
             ],
-            "time": "2015-05-18 14:35:00"
+            "time": "2015-05-19 18:09:35"
         }
     ],
     "packages-dev": [
@@ -1111,7 +1111,10 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "objective-php/primitives": 20,
+        "objective-php/matcher": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

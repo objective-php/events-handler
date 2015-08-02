@@ -20,4 +20,10 @@
          timeoutForMediumTests="10"
          timeoutForLargeTests="60"
          verbose="false">
+
+    <filter>
+        <whitelist>
+            <directory>../src</directory>
+        </whitelist>
+    </filter>
 </phpunit>

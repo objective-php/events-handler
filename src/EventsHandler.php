@@ -4,6 +4,8 @@
 
     use ObjectivePHP\Matcher\Matcher;
     use ObjectivePHP\Primitives\Collection;
+    use ObjectivePHP\ServicesFactory\Factory;
+    use ObjectivePHP\ServicesFactory\Reference;
 
     class EventsHandler
     {
@@ -20,9 +22,21 @@
 
         protected $aliases            = [];
 
+        /**
+         * @var Matcher
+         */
         protected $matcher;
 
+        /**
+         * The service factory allows to bind services directly to events
+         *
+         * @var Factory
+         */
+        protected $servicesFactory;
 
+        /**
+         *
+         */
         public function __construct()
         {
             $this->setMatcher(new Matcher());
@@ -67,6 +81,13 @@
             {
                 foreach ($listenersGroup as $alias => $listener)
                 {
+
+                    // handle service references
+                    if($listener instanceof Reference)
+                    {
+                        $listener = $this->getServicesFactory()->get($listener->getId());
+                    }
+
                     $result = call_user_func($listener, $event);
 
                     // gathers exceptions
@@ -145,9 +166,9 @@
             }
 
             // check callback validity
-            if (!is_callable($callback))
+            if (!is_callable($callback) && !$callback instanceof Reference)
             {
-                throw new Exception ('Callback must be a callable or a component name declared in the factory', Exception::EVENT_INVALID_CALLBACK);
+                throw new Exception ('Callback must be a callable or a service reference', Exception::EVENT_INVALID_CALLBACK);
             }
 
             if (!isset ($this->listeners [$eventName]) || $mode == self::BINDING_MODE_REPLACE)
@@ -255,4 +276,24 @@
         {
             return $this->matcher;
         }
+
+        /**
+         * @return Factory
+         */
+        public function getServicesFactory()
+        {
+            return $this->servicesFactory;
+        }
+
+        /**
+         * @param Factory $servicesFactory
+         *
+         * @return $this
+         */
+        public function setServicesFactory(Factory $servicesFactory)
+        {
+            $this->servicesFactory = $servicesFactory;
+            return $this;
+        }
+
 }

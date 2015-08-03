@@ -134,17 +134,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/objective-php/matcher.git",
-                "reference": "129f13a1753540e60e4df91a058edeb627bc1ac4"
+                "reference": "84adadd2bbb09f05254cb57668d128cde1dc79ac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/objective-php/matcher/zipball/129f13a1753540e60e4df91a058edeb627bc1ac4",
-                "reference": "129f13a1753540e60e4df91a058edeb627bc1ac4",
+                "url": "https://api.github.com/repos/objective-php/matcher/zipball/84adadd2bbb09f05254cb57668d128cde1dc79ac",
+                "reference": "84adadd2bbb09f05254cb57668d128cde1dc79ac",
                 "shasum": ""
             },
             "require": {
                 "objective-php/phpunit-extension": "~1.0",
-                "objective-php/primitives": "dev-master",
                 "php": ">=5.5.0"
             },
             "require-dev": {
@@ -173,7 +172,7 @@
                 "matcher",
                 "objective php"
             ],
-            "time": "2015-05-19 19:11:27"
+            "time": "2015-08-03 19:12:03"
         },
         {
             "name": "objective-php/phpunit-extension",
@@ -280,12 +279,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/objective-php/services-factory.git",
-                "reference": "ddf9dcc7b45cfae3f384416709569d172675ed4a"
+                "reference": "a60a3e0654d4398b9581175a2e669ea7722b7293"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/objective-php/services-factory/zipball/ddf9dcc7b45cfae3f384416709569d172675ed4a",
-                "reference": "ddf9dcc7b45cfae3f384416709569d172675ed4a",
+                "url": "https://api.github.com/repos/objective-php/services-factory/zipball/a60a3e0654d4398b9581175a2e669ea7722b7293",
+                "reference": "a60a3e0654d4398b9581175a2e669ea7722b7293",
                 "shasum": ""
             },
             "require": {
@@ -323,7 +322,7 @@
                 "objective php",
                 "services"
             ],
-            "time": "2015-08-03 17:58:08"
+            "time": "2015-08-03 19:06:42"
         }
     ],
     "packages-dev": [

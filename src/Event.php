@@ -1,8 +1,8 @@
 <?php
     namespace ObjectivePHP\Events;
 
-    use ObjectivePHP\Primitives\Collection;
-    use ObjectivePHP\Primitives\String;
+    use ObjectivePHP\Primitives\Collection\Collection;
+    use ObjectivePHP\Primitives\String\String;
 
     class Event
     {

@@ -5,7 +5,7 @@ use ObjectivePHP\Events\Event;
 use ObjectivePHP\Events\EventsHandler;
 use ObjectivePHP\Events\Exception;
 use ObjectivePHP\PHPUnit\TestCase;
-use ObjectivePHP\ServicesFactory\Factory;
+use ObjectivePHP\ServicesFactory\ServicesFactory;
 use ObjectivePHP\ServicesFactory\Reference;
 use ObjectivePHP\ServicesFactory\Specs\ClassServiceSpecs;
 
@@ -409,7 +409,7 @@ class Events extends TestCase
 
     public function testServiceReferenceCanBeUsedAsCallback()
     {
-        $factory = (new Factory())->registerService(new ClassServiceSpecs('injector', Injector::class));
+        $factory = (new ServicesFactory())->registerService(new ClassServiceSpecs('injector', Injector::class));
         $eventsHanlder = new EventsHandler();
         $factory->setEventsHandler($eventsHanlder);
         $injector = $factory->get('injector');

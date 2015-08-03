@@ -3,8 +3,8 @@
     namespace ObjectivePHP\Events;
 
     use ObjectivePHP\Matcher\Matcher;
-    use ObjectivePHP\Primitives\Collection;
-    use ObjectivePHP\ServicesFactory\Factory;
+    use ObjectivePHP\Primitives\Collection\Collection;
+    use ObjectivePHP\ServicesFactory\ServicesFactory;
     use ObjectivePHP\ServicesFactory\Reference;
 
     class EventsHandler
@@ -30,7 +30,7 @@
         /**
          * The service factory allows to bind services directly to events
          *
-         * @var Factory
+         * @var ServicesFactory
          */
         protected $servicesFactory;
 
@@ -278,7 +278,7 @@
         }
 
         /**
-         * @return Factory
+         * @return ServicesFactory
          */
         public function getServicesFactory()
         {
@@ -286,11 +286,11 @@
         }
 
         /**
-         * @param Factory $servicesFactory
+         * @param ServicesFactory $servicesFactory
          *
          * @return $this
          */
-        public function setServicesFactory(Factory $servicesFactory)
+        public function setServicesFactory(ServicesFactory $servicesFactory)
         {
             $this->servicesFactory = $servicesFactory;
             return $this;

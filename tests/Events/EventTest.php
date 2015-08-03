@@ -4,8 +4,8 @@ namespace Tests\ObjectivePHP\Events;
 use ObjectivePHP\Events\Event;
 use ObjectivePHP\Events\Exception;
 use ObjectivePHP\PHPUnit\TestCase;
-use ObjectivePHP\Primitives\Collection;
-use ObjectivePHP\Primitives\String;
+use ObjectivePHP\Primitives\Collection\Collection;
+use ObjectivePHP\Primitives\String\String;
 
 class EventTest extends TestCase
 {

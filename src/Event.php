@@ -4,7 +4,7 @@
     use ObjectivePHP\Primitives\Collection\Collection;
     use ObjectivePHP\Primitives\String\String;
 
-    class Event
+    class Event implements EventInterface
     {
 
         const WAITING   = 'waiting';
@@ -123,7 +123,7 @@
          *
          * @return Event
          */
-        public function setPrevious(Event $event = null)
+        public function setPrevious(EventInterface $event = null)
         {
             $this->previous = $event;
 

@@ -18,13 +18,30 @@
 
         protected $origin;
 
-        protected $context    = [];
+        /**
+         * @var Collection
+         */
+        protected $context;
 
-        protected $results    = [];
+        /**
+         * @var Collection
+         */
+        protected $results;
 
-        protected $exceptions = [];
+        /**
+         * @var Collection
+         */
+        protected $exceptions;
 
         protected $status     = self::WAITING;
+
+
+        public function __construct()
+        {
+            $this->results = new Collection();
+            $this->context = new Collection();
+            $this->exceptions = (new Collection())->restrictTo(\Exception::class, false);
+        }
 
         /**
          * Event name setter
@@ -199,14 +216,14 @@
                 throw new Exception('Event exception can be set once event has been triggered only', Exception::EVENT_IS_NOT_TRIGGERED_YET);
             }
 
-            $this->exceptions[$callbackName] = $exception;
+            $this->getExceptions()[$callbackName] = $exception;
 
             return $this;
         }
 
         public function isFaulty()
         {
-            return (bool) $this->exceptions;
+            return !$this->getExceptions()->isEmpty();
         }
 
     }

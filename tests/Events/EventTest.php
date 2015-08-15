@@ -50,7 +50,7 @@ class EventTest extends TestCase
         $event = new Event();
 
         // test default context is an array
-        $this->assertEquals([], $event->getContext());
+        $this->assertEquals(new Collection(), $event->getContext());
 
         $context = ['a' => 'a', 'b' => 'b', 'c' => 'c'];
 
@@ -161,7 +161,7 @@ class EventTest extends TestCase
         $event->setResult('test', 'result');
         $this->assertFalse($event->isFaulty());
         $this->assertCount(1, $event->getResults());
-        $this->assertArrayHasKey('test', $event->getResults());
+        $this->assertArrayHasKey('test', $event->getResults()->toArray());
     }
 
 

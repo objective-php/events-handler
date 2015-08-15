@@ -9,6 +9,8 @@
     namespace ObjectivePHP\Events;
     
     
+    use ObjectivePHP\Primitives\Collection\Collection;
+
     interface EventInterface
     {
 
@@ -24,14 +26,23 @@
 
         public function getPrevious();
 
+        /**
+         * @return Collection
+         */
         public function getResults();
 
+        /**
+         * @return Collection
+         */
         public function getContext();
 
         public function setContext($context);
 
         public function getStatus();
 
+        /**
+         * @return Collection
+         */
         public function getExceptions();
 
         public function halt();

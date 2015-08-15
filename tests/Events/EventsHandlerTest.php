@@ -403,7 +403,7 @@ class Events extends TestCase
 
         $unbound = $eventsHandler->unbind('*.any');
 
-        $this->assertEquals(['triggered.callback'], array_keys($eventsHandler->trigger('any.event')->getResults()));
+        $this->assertEquals(['triggered.callback'], $eventsHandler->trigger('any.event')->getResults()->getKeys()->toArray());
         $this->assertEmpty($eventsHandler->trigger('any.any')->getResults());
     }
 

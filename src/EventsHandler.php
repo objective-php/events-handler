@@ -14,6 +14,9 @@
         const BINDING_MODE_FIRST   = 'first';
         const BINDING_MODE_LAST    = 'last';
 
+        /**
+         * @var array
+         */
         protected $currentEventsQueue = [];
 
         protected $listeners          = [];
@@ -34,22 +37,15 @@
          */
         protected $servicesFactory;
 
-        /**
-         *
-         */
-        public function __construct()
-        {
-            $this->setMatcher(new Matcher());
-        }
 
         /**
          * Trigger an event
          *
          * @param string                        $eventName
          * @param mixed                         $origin
-         * @param array|\ArrayObject|Collection $context
+         * @param mixed $context
          *
-         * @return mixed
+         * @return EventInterface
          */
         public function trigger($eventName, $origin = null, $context = [])
         {
@@ -58,6 +54,9 @@
             {
                 $origin = $this;
             }
+
+            // cast context to Collection
+            $context = Collection::cast($context);
 
             // cannot get event from factory
             // because of injection process
@@ -274,6 +273,11 @@
          */
         public function getMatcher()
         {
+            if(is_null($this->matcher))
+            {
+                $this->matcher = new Matcher();
+            }
+
             return $this->matcher;
         }
 

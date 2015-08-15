@@ -190,7 +190,7 @@ class Events extends TestCase
         $this->assertEquals('callback.return.value', $result[0]);
         $this->assertEquals('event.name has been triggered!', $result[1]);
         $this->assertCount(2, $origin->passedBy);
-        $this->assertCount(2, $origin->context->getArrayCopy());
+        $this->assertCount(2, $origin->context->toArray());
     }
 
     public function testNestedEventsCanAccessOtherEvents()

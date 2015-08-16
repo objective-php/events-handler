@@ -47,7 +47,7 @@
          *
          * @return EventInterface
          */
-        public function trigger($eventName, $origin = null, $context = [])
+        public function trigger($eventName, $origin = null, $context = [], EventInterface $event = null)
         {
 
             if (is_null($origin))
@@ -62,7 +62,12 @@
             // because of injection process
             // which triggers an event causing
             // an infinite loop...
-            $event = (new Event())->setName($eventName)->setOrigin($origin)->setContext($context);
+            if(is_null($event))
+            {
+                $event = new Event();
+            }
+
+            $event->setName($eventName)->setOrigin($origin)->setContext($context);
 
             // add reference to previous event if any
             if ($previous = \current($this->currentEventsQueue))

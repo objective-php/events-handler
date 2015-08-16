@@ -2,6 +2,7 @@
 namespace Tests\ObjectivePHP\Events;
 
 use ObjectivePHP\Events\Event;
+use ObjectivePHP\Events\EventInterface;
 use ObjectivePHP\Events\EventsHandler;
 use ObjectivePHP\Events\Exception;
 use ObjectivePHP\PHPUnit\TestCase;
@@ -406,6 +407,23 @@ class Events extends TestCase
         $this->assertEquals(['triggered.callback'], $eventsHandler->trigger('any.event')->getResults()->getKeys()->toArray());
         $this->assertEmpty($eventsHandler->trigger('any.any')->getResults());
     }
+
+    public function testEventsHandlerCanTriggerCustomEvents()
+    {
+        $eventsHandler = new EventsHandler();
+
+        $eventsHandler->bind('any.event', $lambda = ['triggered.callback' => function ()
+        {
+            return 'should be triggered once';
+        }]);
+
+        $customEvent = new Event;
+
+        $returnedEvent = $eventsHandler->trigger('any.event', null, [], $customEvent);
+
+        $this->assertSame($customEvent, $returnedEvent);
+    }
+
 
     /**
      * Disable test because of a dependency issue with services-factory

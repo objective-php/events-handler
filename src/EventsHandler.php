@@ -41,9 +41,9 @@
         /**
          * Trigger an event
          *
-         * @param string                        $eventName
-         * @param mixed                         $origin
-         * @param mixed $context
+         * @param string $eventName
+         * @param mixed  $origin
+         * @param mixed  $context
          *
          * @return EventInterface
          */
@@ -62,7 +62,7 @@
             // because of injection process
             // which triggers an event causing
             // an infinite loop...
-            if(is_null($event))
+            if (is_null($event))
             {
                 $event = new Event();
             }
@@ -87,12 +87,25 @@
                 {
 
                     // handle service references
-                    if($listener instanceof Reference)
+                    if ($listener instanceof Reference)
                     {
                         $listener = $this->getServicesFactory()->get($listener->getId());
                     }
 
-                    $result = call_user_func($listener, $event);
+
+                    // if listener is a class name, instantiate it
+                    if (!is_callable($listener) && class_exists($listener))
+                    {
+                        $className = $listener;
+                        $listener  = new $className;
+
+                        if (!is_callable($listener))
+                        {
+                            throw new Exception(sprintf('Class "%s" does not implement __invoke(), thus cannot be used as a callback', $className), Exception::EVENT_INVALID_CALLBACK);
+                        }
+                    }
+
+                    $result = $listener($event);
 
                     // gathers exceptions
                     if ($result instanceof \Exception)
@@ -129,9 +142,9 @@
         /**
          * Attaches a callback to an event
          *
-         * @param string                $eventName  Event reference
-         * @param string|callable|array $callback   Callback to attach to the event or component reference. If an array is passed, several listeners are bound at once, and array keys (if associative) are used as listeners aliases.
-         * @param string                $mode       Tells where to stack the callbacks for a given event
+         * @param string                $eventName Event reference
+         * @param string|callable|array $callback  Callback to attach to the event or component reference. If an array is passed, several listeners are bound at once, and array keys (if associative) are used as listeners aliases.
+         * @param string                $mode      Tells where to stack the callbacks for a given event
          */
         public function bind($eventName, $callback, $mode = self::BINDING_MODE_LAST)
         {
@@ -170,7 +183,7 @@
             }
 
             // check callback validity
-            if (!is_callable($callback) && !$callback instanceof Reference)
+            if (!is_callable($callback) && !$callback instanceof Reference && !class_exists($callback))
             {
                 throw new Exception ('Callback must be a callable or a service reference', Exception::EVENT_INVALID_CALLBACK);
             }
@@ -278,7 +291,7 @@
          */
         public function getMatcher()
         {
-            if(is_null($this->matcher))
+            if (is_null($this->matcher))
             {
                 $this->matcher = new Matcher();
             }
@@ -302,7 +315,8 @@
         public function setServicesFactory(ServicesFactory $servicesFactory)
         {
             $this->servicesFactory = $servicesFactory;
+
             return $this;
         }
 
-}
+    }

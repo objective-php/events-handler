@@ -5,6 +5,7 @@ use ObjectivePHP\Events\Event;
 use ObjectivePHP\Events\EventInterface;
 use ObjectivePHP\Events\EventsHandler;
 use ObjectivePHP\Events\Exception;
+use ObjectivePHP\Matcher\Matcher;
 use ObjectivePHP\PHPUnit\TestCase;
 use ObjectivePHP\ServicesFactory\ServicesFactory;
 use ObjectivePHP\ServicesFactory\Reference;
@@ -23,6 +24,10 @@ class Events extends TestCase
         };
 
         $eventsHandler->bind('event.name', $callback);
+
+        // inject a matcher to prevent using default one, and test matcher accessors
+        $eventsHandler->setMatcher($matcher = new Matcher());
+        $this->assertSame($matcher, $eventsHandler->getMatcher());
 
         // retrieve all listeners
         $this->assertArrayHasKey('event.name', $eventsHandler->getListeners());
@@ -404,7 +409,7 @@ class Events extends TestCase
 
         $unbound = $eventsHandler->unbind('*.any');
 
-        $this->assertEquals(['triggered.callback'], $eventsHandler->trigger('any.event')->getResults()->getKeys()->toArray());
+        $this->assertEquals(['triggered.callback'], $eventsHandler->trigger('any.event')->getResults()->keys()->toArray());
         $this->assertEmpty($eventsHandler->trigger('any.any')->getResults());
     }
 
@@ -422,6 +427,24 @@ class Events extends TestCase
         $returnedEvent = $eventsHandler->trigger('any.event', null, [], $customEvent);
 
         $this->assertSame($customEvent, $returnedEvent);
+    }
+
+    public function testBindingInvokableClass()
+    {
+        $eventsHandler = new EventsHandler();
+
+        $eventsHandler->bind('some.event', Callback::class);
+
+        $eventsHandler->trigger('some.event');
+
+        $this->assertTrue(Callback::$triggered);
+
+        $this->expectsException(function() use ($eventsHandler){
+
+            $eventsHandler->bind('other.event', InvalidCallback::class);
+            $eventsHandler->trigger('other.event');
+
+        }, Exception::class, null, Exception::EVENT_INVALID_CALLBACK);
     }
 
 
@@ -455,4 +478,16 @@ class Injector
     static public $count;
 
     public function __invoke() { self::$count++; }
+}
+
+
+class Callback
+{
+    public static $triggered = false;
+
+    public function __invoke() { self::$triggered = true; }
+}
+
+class InvalidCallback {
+
 }

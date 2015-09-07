@@ -2,6 +2,8 @@
 
     namespace ObjectivePHP\Events;
 
+    use ObjectivePHP\Events\Callback\AliasedCallback;
+    use ObjectivePHP\Events\Callback\CallbacksAggregate;
     use ObjectivePHP\Matcher\Matcher;
     use ObjectivePHP\Primitives\Collection\Collection;
     use ObjectivePHP\ServicesFactory\ServicesFactory;
@@ -79,35 +81,56 @@
 
             $listeners = $this->getListeners($eventName);
 
+
             // TODO sort listeners according to their priority or other mechanism
             $i = 0;
             foreach ($listeners as $listenersGroup)
             {
-                foreach ($listenersGroup as $alias => $listener)
+
+                $callbacks = [];
+
+                // handle callbacks aggregate
+                foreach($listenersGroup as $alias => $callback)
+                {
+                    if($callback instanceof CallbacksAggregate)
+                    {
+                        $callback->getCallbacks()->each(function($callback, $callbackAlias) use(&$callbacks, $alias)
+                        {
+                           $callbackAlias = implode('.', [$alias, $callbackAlias]);
+                           $callbacks[$callbackAlias] = $callback;
+                        });
+                    }
+                    else
+                    {
+                        $callbacks[$alias] = $callback;
+                    }
+                }
+
+                foreach ($callbacks as $alias => $callback)
                 {
 
                     // handle service references
-                    if ($listener instanceof Reference)
+                    if ($callback instanceof Reference)
                     {
-                        $listener = $this->getServicesFactory()->get($listener->getId());
+                        $callback = $this->getServicesFactory()->get($callback->getId());
                     }
 
 
                     // if listener is a class name, instantiate it
-                    if (!is_callable($listener) && class_exists($listener))
+                    if (!is_callable($callback) && class_exists($callback))
                     {
-                        $className = $listener;
-                        $listener  = new $className;
+                        $className = $callback;
+                        $callback  = new $className;
 
-                        if (!is_callable($listener))
+                        if (!is_callable($callback))
                         {
                             throw new Exception(sprintf('Class "%s" does not implement __invoke(), thus cannot be used as a callback', $className), Exception::EVENT_INVALID_CALLBACK);
                         }
                     }
 
-                    $result = $listener($event);
+                    $result = $callback($event);
 
-                    // gathers exceptions
+                    // gather exceptions
                     if ($result instanceof \Exception)
                     {
                         $event->setException($i, $result);
@@ -125,7 +148,7 @@
                         // @gdelamarre
                         goto shunt;
                     }
-                    $i++;
+                    if(!is_string($alias)) $i++;
                 }
             }
 
@@ -152,10 +175,11 @@
             $alias = false;
 
             // check if callback is aliased
-            // need to distinguish between callables and actual arrays
-            if (is_array($callback) && !is_callable($callback))
+            if ($callback instanceof AliasedCallback)
             {
-                list ($alias, $callback) = each($callback);
+                $alias = $callback->getAlias();
+                $callback = $callback->getCallback();
+
                 if (!isset ($this->aliases[$alias]))
                 {
                     $this->aliases[$alias] = &$callback;
@@ -183,9 +207,9 @@
             }
 
             // check callback validity
-            if (!is_callable($callback) && !$callback instanceof Reference && !class_exists($callback))
+            if (!is_callable($callback) && !$callback instanceof Reference && !$callback instanceof CallbacksAggregate && !class_exists($callback))
             {
-                throw new Exception ('Callback must be a callable or a service reference', Exception::EVENT_INVALID_CALLBACK);
+                throw new Exception ('Callback must be a callable, an invokable class name, a service reference or a CallbacksAggregate', Exception::EVENT_INVALID_CALLBACK);
             }
 
             if (!isset ($this->listeners [$eventName]) || $mode == self::BINDING_MODE_REPLACE)
@@ -239,7 +263,21 @@
                 return $matcher->match($eventFilter, $listener);
             }));
 
-            return array_intersect_key($this->listeners, $matchedListeners);
+            $matchedListeners = array_intersect_key($this->listeners, $matchedListeners);
+
+            if($this->getMatcher()->containsWildcard($eventFilter)
+                || empty($matchedListeners[$eventFilter])
+            )
+            {
+                // do not change priorities if the filter contains wildcard
+                return $matchedListeners;
+            }
+            else
+            {
+                $exactMatches = $matchedListeners[$eventFilter];
+                unset($matchedListeners[$eventFilter]);
+                return array_merge([$eventFilter => $exactMatches], $matchedListeners);
+            }
         }
 
         public function unbind($eventFilter)

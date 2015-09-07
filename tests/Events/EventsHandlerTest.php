@@ -1,6 +1,9 @@
 <?php
 namespace Tests\ObjectivePHP\Events;
 
+use ObjectivePHP\Events\Callback\AbstractCallback;
+use ObjectivePHP\Events\Callback\AliasedCallback;
+use ObjectivePHP\Events\Callback\CallbacksAggregate;
 use ObjectivePHP\Events\Event;
 use ObjectivePHP\Events\EventInterface;
 use ObjectivePHP\Events\EventsHandler;
@@ -130,6 +133,18 @@ class Events extends TestCase
 
     }
 
+    public function testBindingWithExactMatchHavePriorityOverWildcardsMatches()
+    {
+        $eventsHandler = new EventsHandler();
+
+        $eventsHandler->bind('*', new Callback());
+        $eventsHandler->bind('event.name', new Callback());
+
+        $this->assertEquals(['event.name', '*'], array_keys($eventsHandler->getListeners('event.name')));
+        $this->assertEquals(['*', 'event.name'], array_keys($eventsHandler->getListeners('*')));
+
+    }
+
     public function testBindingAnInvalidCallbackThrowsAnException()
     {
         $this->expectsException(function ()
@@ -144,7 +159,7 @@ class Events extends TestCase
         $callback = $this->getMock('CallbackClass', ['__invoke']);
         $callback->expects($this->exactly(2))->method('__invoke');
         $eventsHandler = new EventsHandler();
-        $eventsHandler->bind('*.name', ['alias' => $callback]);
+        $eventsHandler->bind('*.name', new AliasedCallback('alias', $callback));
 
         // this second call should fail
         $eventsHandler->bind('event.*', 'alias');
@@ -155,16 +170,16 @@ class Events extends TestCase
     public function testBindingTwoCallbacksWithSameAliasThrowsAnException()
     {
         $eventsHandler = new EventsHandler();
-        $eventsHandler->bind('*', ['alias' => function ()
+        $eventsHandler->bind('*', new AliasedCallback('alias', function ()
         {
-        }]);
+        }));
 
         // this second call should fail
         $this->expectsException(function () use ($eventsHandler)
         {
-            $eventsHandler->bind('*', ['alias' => function ()
+            $eventsHandler->bind('*', new AliasedCallback('alias', function ()
             {
-            }]);
+            }));
         }, Exception::class, 'alias', Exception::EVENT_INVALID_CALLBACK);
     }
 
@@ -281,7 +296,7 @@ class Events extends TestCase
         {
             return 'third bound callback';
         };
-        $eventsHandler->bind('event.name', ['callback.alias' => $thirdCallback], EventsHandler::BINDING_MODE_FIRST);
+        $eventsHandler->bind('event.name', new AliasedCallback('callback.alias', $thirdCallback), EventsHandler::BINDING_MODE_FIRST);
         $listeners = $eventsHandler->getListeners('event.name');
         $this->assertCount(3, $listeners['event.name']);
         $this->assertEquals($thirdCallback, $listeners['event.name'][0]);
@@ -373,10 +388,10 @@ class Events extends TestCase
     {
         $eventsHandler = new EventsHandler();
 
-        $eventsHandler->bind('any.*', ['listener.alias' => $lambda = function ()
+        $eventsHandler->bind('any.*', new AliasedCallback('listener.alias', $lambda = function ()
         {
             return 'should not be triggered';
-        }]);
+        }));
 
         $eventsHandler->unbind('any.*');
 
@@ -398,10 +413,10 @@ class Events extends TestCase
             return 'should not be triggered';
         });
 
-        $eventsHandler->bind('any.event', $lambda = ['triggered.callback' => function ()
+        $eventsHandler->bind('any.event', $lambda = new AliasedCallback('triggered.callback', function ()
         {
             return 'should be triggered once';
-        }]);
+        }));
         $eventsHandler->bind('event.any', $lambda = function ()
         {
             return 'should not be triggered';
@@ -417,10 +432,10 @@ class Events extends TestCase
     {
         $eventsHandler = new EventsHandler();
 
-        $eventsHandler->bind('any.event', $lambda = ['triggered.callback' => function ()
+        $eventsHandler->bind('any.event', $lambda = new AliasedCallback('triggered.callback', function ()
         {
             return 'should be triggered once';
-        }]);
+        }));
 
         $customEvent = new Event;
 
@@ -447,6 +462,30 @@ class Events extends TestCase
         }, Exception::class, null, Exception::EVENT_INVALID_CALLBACK);
     }
 
+    public function testCallbacksAggregatesHandling()
+    {
+        $event = new Event();
+
+        $callbacks[] = $this->getMockForAbstractClass(AbstractCallback::class);
+        $callbacks[] = $this->getMockForAbstractClass(AbstractCallback::class);
+
+        foreach ($callbacks as $callback)
+        {
+            $callback->expects($this->once())->method('run')->with($event)->willReturnSelf();
+        }
+
+        $aggregate = new CallbacksAggregate('aggregate', $callbacks);
+
+        $eventsHandler = new EventsHandler();
+
+        $eventsHandler->bind('some.event', $aggregate);
+
+        $eventsHandler->bind('some.event', function () {});
+        $eventsHandler->trigger('some.event', null, [], $event);
+
+        $this->assertEquals(['aggregate.0', 'aggregate.1', 0], $event->getResults()->keys()->toArray());
+
+    }
 
     /**
      * Disable test because of a dependency issue with services-factory

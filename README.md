@@ -32,4 +32,4 @@ Once again, this is very simple:
 $eventsHandler->trigger('event.name'); // will echo 'Event event.name was just fired!'
 ```
 
-More documentaiton to come soon!
+More documentation to come soon!

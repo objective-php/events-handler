@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/objective-php/matcher.git",
-                "reference": "84adadd2bbb09f05254cb57668d128cde1dc79ac"
+                "reference": "321d27bcb933f62d2784e7e49411e4bc7fab3433"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/objective-php/matcher/zipball/84adadd2bbb09f05254cb57668d128cde1dc79ac",
-                "reference": "84adadd2bbb09f05254cb57668d128cde1dc79ac",
+                "url": "https://api.github.com/repos/objective-php/matcher/zipball/321d27bcb933f62d2784e7e49411e4bc7fab3433",
+                "reference": "321d27bcb933f62d2784e7e49411e4bc7fab3433",
                 "shasum": ""
             },
             "require": {
@@ -50,7 +50,7 @@
                 "matcher",
                 "objective php"
             ],
-            "time": "2015-08-03 19:12:03"
+            "time": "2015-09-07 23:45:46"
         },
         {
             "name": "objective-php/phpunit-extension",

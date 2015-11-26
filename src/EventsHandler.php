@@ -7,7 +7,7 @@
     use ObjectivePHP\Matcher\Matcher;
     use ObjectivePHP\Primitives\Collection\Collection;
     use ObjectivePHP\ServicesFactory\ServicesFactory;
-    use ObjectivePHP\ServicesFactory\Reference;
+    use ObjectivePHP\ServicesFactory\ServiceReference;
 
     class EventsHandler
     {
@@ -110,7 +110,7 @@
                 {
 
                     // handle service references
-                    if ($callback instanceof Reference)
+                    if ($callback instanceof ServiceReference)
                     {
                         $callback = $this->getServicesFactory()->get($callback->getId());
                     }
@@ -207,7 +207,7 @@
             }
 
             // check callback validity
-            if (!is_callable($callback) && !$callback instanceof Reference && !$callback instanceof CallbacksAggregate && !class_exists($callback))
+            if (!is_callable($callback) && !$callback instanceof ServiceReference && !$callback instanceof CallbacksAggregate && !class_exists($callback))
             {
                 throw new Exception ('Callback must be a callable, an invokable class name, a service reference or a CallbacksAggregate', Exception::EVENT_INVALID_CALLBACK);
             }

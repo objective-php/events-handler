@@ -5,7 +5,7 @@ use ObjectivePHP\Events\Event;
 use ObjectivePHP\Events\Exception;
 use ObjectivePHP\PHPUnit\TestCase;
 use ObjectivePHP\Primitives\Collection\Collection;
-use ObjectivePHP\Primitives\String\String;
+use ObjectivePHP\Primitives\String\Str;
 
 class EventTest extends TestCase
 {
@@ -72,7 +72,7 @@ class EventTest extends TestCase
         $currentEvent->setName('current.event')->setPrevious($previousEvent);
 
         $this->assertInstanceOf(Event::class, $currentEvent->getPrevious());
-        $this->assertEquals(String::cast('previous.event'), $currentEvent->getPrevious()->getName());
+        $this->assertEquals(Str::cast('previous.event'), $currentEvent->getPrevious()->getName());
 
     }
 

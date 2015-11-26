@@ -2,7 +2,7 @@
     namespace ObjectivePHP\Events;
 
     use ObjectivePHP\Primitives\Collection\Collection;
-    use ObjectivePHP\Primitives\String\String;
+    use ObjectivePHP\Primitives\String\Str;
 
     class Event implements EventInterface
     {
@@ -50,7 +50,7 @@
          */
         public function setName($name)
         {
-            $name = String::cast($name);
+            $name = Str::cast($name);
 
             $this->name = $name->lower();
 
@@ -58,7 +58,7 @@
         }
 
         /**
-         * @return String
+         * @return Str
          */
         public function getName()
         {

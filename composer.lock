@@ -4,26 +4,31 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "cddeadf232e594250696640a441318c9",
-    "content-hash": "a1adeed0b2bdb7fb41a2057cbed0ed96",
+    "hash": "314fed69c09842e63180c4d33eb3a772",
+    "content-hash": "b31bc12ef620f289b59ea0fb2bc12fb9",
     "packages": [
         {
-            "name": "objective-php/matcher",
+            "name": "objective-php/components",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/objective-php/matcher.git",
-                "reference": "df818982e9c12e5742fe5ad3fdb8e67ade3eb9b0"
+                "url": "https://github.com/objective-php/components.git",
+                "reference": "16f66deefb825a4cb56d8928e5e3f47672f1833c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/objective-php/matcher/zipball/df818982e9c12e5742fe5ad3fdb8e67ade3eb9b0",
-                "reference": "df818982e9c12e5742fe5ad3fdb8e67ade3eb9b0",
+                "url": "https://api.github.com/repos/objective-php/components/zipball/16f66deefb825a4cb56d8928e5e3f47672f1833c",
+                "reference": "16f66deefb825a4cb56d8928e5e3f47672f1833c",
                 "shasum": ""
             },
             "require": {
-                "objective-php/phpunit-extension": "~1.0",
-                "php": ">=5.5.0"
+                "php": ">=7.0"
+            },
+            "replace": {
+                "objective-php/config": "*",
+                "objective-php/matcher": "*",
+                "objective-php/phpunit-extension": "*",
+                "objective-php/primitives": "*"
             },
             "require-dev": {
                 "phpunit/phpunit": "4.*"
@@ -31,101 +36,7 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "ObjectivePHP\\Matcher\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-3.0"
-            ],
-            "authors": [
-                {
-                    "name": "Gauthier 'Rusty' Delamarre",
-                    "email": "gauthier@objective-php.org",
-                    "role": "lead"
-                }
-            ],
-            "description": "Generic engine to match identifiers against simple yet powerful patterns",
-            "homepage": "https://github.com/objective-php/matcher",
-            "keywords": [
-                "matcher",
-                "objective php"
-            ],
-            "time": "2015-09-20 15:17:38"
-        },
-        {
-            "name": "objective-php/phpunit-extension",
-            "version": "v1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/objective-php/phpunit-extension.git",
-                "reference": "e500f79d1afdc3f49237f104b3995916363c1ac8"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/objective-php/phpunit-extension/zipball/e500f79d1afdc3f49237f104b3995916363c1ac8",
-                "reference": "e500f79d1afdc3f49237f104b3995916363c1ac8",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.5.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "4.*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "ObjectivePHP\\PHPUnit": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-3.0"
-            ],
-            "authors": [
-                {
-                    "name": "Gauthier 'Rusty' Delamarre",
-                    "email": "gauthier@objective-php.org",
-                    "role": "lead"
-                }
-            ],
-            "description": "Some add-ons for PHPUnit Unit Test Framework",
-            "homepage": "https://github.com/objective-php/phpunit-extension",
-            "keywords": [
-                "objective php",
-                "phpunit"
-            ],
-            "time": "2015-05-16 15:35:37"
-        },
-        {
-            "name": "objective-php/primitives",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/objective-php/primitives.git",
-                "reference": "e71e1a48d921da7db51ac54bc0042a694875714c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/objective-php/primitives/zipball/e71e1a48d921da7db51ac54bc0042a694875714c",
-                "reference": "e71e1a48d921da7db51ac54bc0042a694875714c",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.6.0"
-            },
-            "require-dev": {
-                "objective-php/phpunit-extension": "1.0",
-                "phpunit/phpunit": "4.*"
-            },
-            "suggest": {
-                "objective-php/matcher": "~1.1"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "ObjectivePHP\\Primitives\\": "src/"
+                    "ObjectivePHP\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -139,18 +50,18 @@
                     "role": "lead"
                 },
                 {
-                    "name": "Ronan 'Gloo' Teissier",
-                    "email": "ronan@objective-php.org",
+                    "name": "Jérôme 'Neofox' Schaeffer",
+                    "email": "jerome@objective-php.org",
                     "role": "dev"
                 }
             ],
-            "description": "Primitives classes for ObjectivePHP",
-            "homepage": "https://github.com/objective-php/primitives",
+            "description": "Objective PHP Components",
+            "homepage": "https://github.com/objective-php/components",
             "keywords": [
                 "objective php",
                 "primitives"
             ],
-            "time": "2015-11-25 16:00:57"
+            "time": "2015-11-27 11:16:46"
         }
     ],
     "packages-dev": [
@@ -1109,13 +1020,12 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "objective-php/primitives": 20,
-        "objective-php/matcher": 20
+        "objective-php/components": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.6.0"
+        "php": ">=7.0"
     },
     "platform-dev": []
 }

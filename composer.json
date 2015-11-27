@@ -17,17 +17,12 @@
     }
   ],
   "require": {
-    "php": ">=5.6.0",
-    "objective-php/primitives": "dev-master",
-    "objective-php/matcher": "dev-master"
+    "php": ">=7.0",
+    "objective-php/components": "dev-master"
     },
   "require-dev": {
-    "objective-php/phpunit-extension": "1.0",
     "phpunit/phpunit": "4.*"
   },
- "suggest": {
-    "objective-php/services-factory": "~0.9"
-},
   "autoload": {
     "psr-4": {
       "ObjectivePHP\\Events\\": "src/"

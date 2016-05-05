@@ -5,13 +5,13 @@ use ObjectivePHP\Events\Callback\AbstractCallback;
 use ObjectivePHP\Events\Callback\AliasedCallback;
 use ObjectivePHP\Events\Callback\CallbacksAggregate;
 use ObjectivePHP\Events\Event;
-use ObjectivePHP\Events\EventInterface;
 use ObjectivePHP\Events\EventsHandler;
 use ObjectivePHP\Events\Exception;
 use ObjectivePHP\Matcher\Matcher;
 use ObjectivePHP\PHPUnit\TestCase;
-use ObjectivePHP\ServicesFactory\ServicesFactory;
 use ObjectivePHP\ServicesFactory\Reference;
+use ObjectivePHP\ServicesFactory\ServiceReference;
+use ObjectivePHP\ServicesFactory\ServicesFactory;
 use ObjectivePHP\ServicesFactory\Specs\ClassServiceSpecs;
 
 class Events extends TestCase
@@ -104,9 +104,9 @@ class Events extends TestCase
                 ],
                 'any.*',
                 [
-                    'any.event'       => [$lambda],
-                    'any.*'           => [$lambda],
-                    '*.any'           => [$lambda],
+                    'any.event' => [$lambda],
+                    'any.*' => [$lambda],
+                    '*.any' => [$lambda],
                     'any.other.event' => [$lambda]
 
                 ],
@@ -124,7 +124,7 @@ class Events extends TestCase
     {
         $eventsHandler = new EventsHandler();
 
-        foreach ($eventsToBind as $eventToBind)
+        foreach($eventsToBind as $eventToBind)
         {
             $eventsHandler->bind($eventToBind, $lambda);
         }
@@ -454,7 +454,8 @@ class Events extends TestCase
 
         $this->assertTrue(Callback::$triggered);
 
-        $this->expectsException(function() use ($eventsHandler){
+        $this->expectsException(function () use ($eventsHandler)
+        {
 
             $eventsHandler->bind('other.event', InvalidCallback::class);
             $eventsHandler->trigger('other.event');
@@ -469,7 +470,7 @@ class Events extends TestCase
         $callbacks[] = $this->getMockForAbstractClass(AbstractCallback::class);
         $callbacks[] = $this->getMockForAbstractClass(AbstractCallback::class);
 
-        foreach ($callbacks as $callback)
+        foreach($callbacks as $callback)
         {
             $callback->expects($this->once())->method('run')->with($event)->willReturnSelf();
         }
@@ -480,24 +481,22 @@ class Events extends TestCase
 
         $eventsHandler->bind('some.event', $aggregate);
 
-        $eventsHandler->bind('some.event', function () {});
+        $eventsHandler->bind('some.event', function ()
+        {
+        });
         $eventsHandler->trigger('some.event', null, [], $event);
 
         $this->assertEquals(['aggregate.0', 'aggregate.1', 0], $event->getResults()->keys()->toArray());
 
     }
 
-    /**
-     * Disable test because of a dependency issue with services-factory
-
     public function testServiceReferenceCanBeUsedAsCallback()
     {
         $factory = (new ServicesFactory())->registerService(new ClassServiceSpecs('injector', Injector::class));
-        $eventsHanlder = new EventsHandler();
-        $factory->setEventsHandler($eventsHanlder);
+        $eventsHanlder = (new EventsHandler())->setServicesFactory($factory);
         $injector = $factory->get('injector');
 
-        $eventsHanlder->bind('some.event', new Reference('injector'));
+        $eventsHanlder->bind('some.event', new ServiceReference('injector'));
 
         $this->assertSame($injector, $factory->get($eventsHanlder->getListeners('some.event')['some.event'][0]->getId()));
 
@@ -507,7 +506,7 @@ class Events extends TestCase
         $this->assertEquals(1, Injector::$count);
 
     }
-     */
+
 
 }
 
@@ -516,7 +515,10 @@ class Injector
 {
     static public $count;
 
-    public function __invoke() { self::$count++; }
+    public function __invoke()
+    {
+        self::$count++;
+    }
 }
 
 
@@ -524,9 +526,13 @@ class Callback
 {
     public static $triggered = false;
 
-    public function __invoke() { self::$triggered = true; }
+    public function __invoke()
+    {
+        self::$triggered = true;
+    }
 }
 
-class InvalidCallback {
+class InvalidCallback
+{
 
 }

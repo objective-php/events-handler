@@ -134,11 +134,13 @@
 
                 foreach ($callbacks as $alias => $callback)
                 {
+                    $shouldInject = true;
 
                     // handle service references
                     if ($callback instanceof ServiceReference)
                     {
                         $callback = $this->getServicesFactory()->get($callback->getId());
+                        $shouldInject = false;
                     }
 
 
@@ -152,6 +154,10 @@
                         {
                             throw new Exception(sprintf('Class "%s" does not implement __invoke(), thus cannot be used as a callback', $className), Exception::EVENT_INVALID_CALLBACK);
                         }
+                    }
+
+                    if ($shouldInject && is_object($callback) && $this->getServicesFactory()) {
+                        $this->getServicesFactory()->injectDependencies($callback);
                     }
 
                     $result = $callback($event);

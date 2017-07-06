@@ -185,7 +185,11 @@ class Events extends TestCase
 
     public function testCanTriggerAndGetReturnValuesBackEvents()
     {
+        $servicesFactoryMock = $this->getMock(ServicesFactory::class, ['injectDependencies']);
+        $servicesFactoryMock->expects($this->any())->method('injectDependencies')->willReturn($servicesFactoryMock);
+
         $eventsHandler = new EventsHandler();
+        $eventsHandler->setServicesFactory($servicesFactoryMock);
 
         $callback = function (Event $event)
         {
@@ -196,6 +200,12 @@ class Events extends TestCase
         };
 
         $eventsHandler->bind('event.name', $callback);
+        $eventsHandler->bind('some.event2', new class {
+            public function __invoke()
+            {
+                // TODO: Implement __invoke() method.
+            }
+        });
         $eventsHandler->bind('event.name', function (Event $event)
         {
             $event->getOrigin()->passedBy['b'] = __FUNCTION__;

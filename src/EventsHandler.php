@@ -13,22 +13,8 @@
      * Class EventsHandler
      * @package ObjectivePHP\Events
      */
-    class EventsHandler
+    class EventsHandler implements EventsHandlerInterface
     {
-
-        /**
-         *
-         */
-        const BINDING_MODE_REPLACE = 'replace';
-        /**
-         *
-         */
-        const BINDING_MODE_FIRST   = 'first';
-        /**
-         *
-         */
-        const BINDING_MODE_LAST    = 'last';
-
         /**
          * @var array
          */

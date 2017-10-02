@@ -23,5 +23,5 @@ interface EventsHandlerAwareInterface
      *
      * @return $this
      */
-    public function setEventHandler(EventsHandlerInterface $eventsHandler);
+    public function setEventsHandler(EventsHandlerInterface $eventsHandler);
 }

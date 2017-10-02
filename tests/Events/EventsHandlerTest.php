@@ -156,7 +156,7 @@ class Events extends TestCase
 
     public function testAliasing()
     {
-        $callback = $this->getMock('CallbackClass', ['__invoke']);
+        $callback = $this->getMockBuilder('CallbackClass')->setMethods(['__invoke'])->getMock();
         $callback->expects($this->exactly(2))->method('__invoke');
         $eventsHandler = new EventsHandler();
         $eventsHandler->bind('*.name', new AliasedCallback('alias', $callback));
@@ -185,7 +185,7 @@ class Events extends TestCase
 
     public function testCanTriggerAndGetReturnValuesBackEvents()
     {
-        $servicesFactoryMock = $this->getMock(ServicesFactory::class, ['injectDependencies']);
+        $servicesFactoryMock = $this->getMockBuilder(ServicesFactory::class)->setMethods(['injectDependencies'])->getMock();
         $servicesFactoryMock->expects($this->any())->method('injectDependencies')->willReturn($servicesFactoryMock);
 
         $eventsHandler = new EventsHandler();

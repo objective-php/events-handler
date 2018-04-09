@@ -2,13 +2,13 @@
 
 namespace Tests\ObjectivePHP\Events;
 
+use Codeception\Test\Unit;
 use ObjectivePHP\Events\Event;
-use ObjectivePHP\Events\Exception;
-use ObjectivePHP\PHPUnit\TestCase;
+use ObjectivePHP\Events\Exception\EventException;
 use ObjectivePHP\Primitives\Collection\Collection;
 use ObjectivePHP\Primitives\String\Str;
 
-class EventTest extends TestCase
+class EventTest extends Unit
 {
     public function testEventNameAccessorAndMutator()
     {
@@ -40,9 +40,10 @@ class EventTest extends TestCase
         $this->assertEquals($origin, $event->getOrigin());
 
         // check that origin cannot be overriden
-        $this->expectsException(function () use ($event) {
-            $event->setOrigin('should not override $origin');
-        }, Exception::class, null, Exception::EVENT_ORIGIN_IS_IMMUTABLE);
+        $this->expectException(EventException::class);
+        $this->expectExceptionCode(EventException::ORIGIN_IS_IMMUTABLE);
+
+        $event->setOrigin('should not override $origin');
 
     }
 
@@ -103,25 +104,26 @@ class EventTest extends TestCase
         $event->setContext(['a' => 'value']);
         $event->setContext(['b' => 'other value']);
         $this->assertEquals(Collection::cast(['b' => 'other value']), $event->getContext());
+        /*
+                $this->expectsException(function () use ($event) {
 
-        $this->expectsException(function () use ($event) {
+                    $event->setContext('wrong type - should be an array or an ArrayObject');
 
-            $event->setContext('wrong type - should be an array or an ArrayObject');
+                }, EventException::class, null, EventException::INVALID_CONTEXT);
 
-        }, Exception::class, null, Exception::EVENT_INVALID_CONTEXT);
+                $this->expectsException(function () use ($event) {
 
-        $this->expectsException(function () use ($event) {
+                    $event->setContext($this);
 
-            $event->setContext($this);
+                }, EventException::class, null, EventException::INVALID_CONTEXT);
+        */
+        $this->expectException(EventException::class);
+        $this->expectExceptionCode(EventException::INVALID_CONTEXT);
 
-        }, Exception::class, null, Exception::EVENT_INVALID_CONTEXT);
+        $newContext = new \stdClass;
+        $newContext->property = 'wrong type - should be an array or an ArrayObject';
+        $event->setContext($newContext);
 
-        $this->expectsException(function () use ($event) {
-            $newContext = new \stdClass;
-            $newContext->property = 'wrong type - should be an array or an ArrayObject';
-            $event->setContext($newContext);
-
-        }, Exception::class, null, Exception::EVENT_INVALID_CONTEXT);
     }
 
     public function testContextCanBeOverridden()
@@ -147,7 +149,7 @@ class EventTest extends TestCase
     {
         $event = new Event;
         $event->setOrigin($this);
-        $event->setException('test', new Exception());
+        $event->setException('test', new EventException());
 
         $this->assertTrue($event->isFaulty());
 
@@ -169,32 +171,32 @@ class EventTest extends TestCase
     public function testEventThrowAnExceptionIfResultsAreAccededBeforeAnyCallbacksHasRun()
     {
         $event = new Event;
-        $this->expectsException(function () use ($event) {
-            $event->getResults();
-        }, Exception::class, null, Exception::EVENT_IS_NOT_TRIGGERED_YET);
+        $this->expectException(EventException::class);
+        $this->expectExceptionCode(EventException::IS_NOT_TRIGGERED_YET);
+        $event->getResults();
     }
 
     public function testEventResultsCanBeSetOnlyIfWhenEventIsTriggered()
     {
         $event = new Event;
-        $this->expectsException(function () use ($event) {
-            $event->setResult('callback', 'return');
-        }, Exception::class, null, Exception::EVENT_IS_NOT_TRIGGERED_YET);
+        $this->expectException(EventException::class);
+        $this->expectExceptionCode(EventException::IS_NOT_TRIGGERED_YET);
+        $event->setResult('callback', 'return');
     }
 
     public function testEventThrowAnExceptionIfExceptionsAreAccededBeforeAnyCallbacksHasRun()
     {
         $event = new Event;
-        $this->expectsException(function () use ($event) {
-            $event->getExceptions();
-        }, Exception::class, null, Exception::EVENT_IS_NOT_TRIGGERED_YET);
+        $this->expectException(EventException::class);
+        $this->expectExceptionCode(EventException::IS_NOT_TRIGGERED_YET);
+        $event->getExceptions();
     }
 
     public function testExceptionsCanBeSetOnEventOnlyIfEventIsTriggered()
     {
         $event = new Event;
-        $this->expectsException(function () use ($event) {
-            $event->setException('callback', new \Exception('test'));
-        }, Exception::class, null, Exception::EVENT_IS_NOT_TRIGGERED_YET);
+        $this->expectException(EventException::class);
+        $this->expectExceptionCode(EventException::IS_NOT_TRIGGERED_YET);
+        $event->setException('callback', new \Exception('test'));
     }
 }

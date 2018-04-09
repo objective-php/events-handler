@@ -1,57 +1,80 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: gauthier
+ * Date: 14/08/15
+ * Time: 18:40
+ */
+
+namespace ObjectivePHP\Events;
+
+
+use ObjectivePHP\Primitives\Collection\Collection;
+
+/**
+ * Interface EventInterface
+ * @package ObjectivePHP\Events
+ */
+interface EventInterface
+{
+
     /**
-     * Created by PhpStorm.
-     * User: gauthier
-     * Date: 14/08/15
-     * Time: 18:40
+     * @param $name
+     * @return mixed
      */
-    
-    namespace ObjectivePHP\Events;
-    
-    
-    use ObjectivePHP\Primitives\Collection\Collection;
+    public function setName($name);
 
-    interface EventInterface
-    {
+    /**
+     * @param $origin
+     * @return mixed
+     */
+    public function setOrigin($origin);
 
-        public function setName($name);
+    /**
+     * @param EventInterface $previous
+     * @return mixed
+     */
+    public function setPrevious(EventInterface $previous);
 
-        public function getName();
+    /**
+     * @return Collection
+     */
+    public function getResults();
 
-        public function setOrigin($origin);
+    /**
+     * @return Collection
+     */
+    public function getContext();
 
-        public function getOrigin();
+    /**
+     * @param $context
+     * @return mixed
+     */
+    public function setContext($context);
 
-        public function setPrevious(EventInterface $previous);
+    /**
+     * @return mixed
+     */
+    public function getStatus();
 
-        public function getPrevious();
+    /**
+     * @return Collection
+     */
+    public function getExceptions();
 
-        /**
-         * @return Collection
-         */
-        public function getResults();
+    /**
+     * @return mixed
+     */
+    public function halt();
 
-        /**
-         * @return Collection
-         */
-        public function getContext();
+    /**
+     * @return bool
+     */
+    public function isHalted();
 
-        public function setContext($context);
+    /**
+     * @return bool
+     */
+    public function isFaulty();
 
-        public function getStatus();
-
-        /**
-         * @return Collection
-         */
-        public function getExceptions();
-
-        public function halt();
-
-        public function isHalted();
-
-        public function isFaulty();
-
-
-
-
-    }
+}

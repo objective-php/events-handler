@@ -25,6 +25,11 @@ interface EventInterface
     public function setName($name);
 
     /**
+     * @return mixed
+     */
+    public function getName();
+
+    /**
      * @param $origin
      * @return mixed
      */

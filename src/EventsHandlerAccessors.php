@@ -7,7 +7,7 @@ namespace ObjectivePHP\Events;
  *
  * @package ObjectivePHP\Events
  */
-trait EventsHandlerAwareTrait
+trait EventsHandlerAccessors
 {
     /**
      * @var EventsHandlerInterface $eventsHandler
@@ -41,9 +41,9 @@ trait EventsHandlerAwareTrait
     /**
      * Proxy trigger method
      *
-     * @param string              $eventName
-     * @param mixed               $origin
-     * @param array               $context
+     * @param string $eventName
+     * @param mixed $origin
+     * @param array $context
      * @param EventInterface|null $event
      */
     public function trigger($eventName, $origin = null, $context = [], EventInterface $event = null)

@@ -196,8 +196,9 @@ class Events extends Unit
 
         $origin = new \stdClass();
 
-        $this->assertCount(2, $result = $eventsHandler->trigger('event.name', $origin, new \ArrayObject(['context' => 'value']))
-            ->getResults());
+        $this->assertCount(2,
+            $result = $eventsHandler->trigger('event.name', $origin, new \ArrayObject(['context' => 'value']))
+                ->getResults());
         $this->assertEquals('callback.return.value', $result[0]);
         $this->assertEquals('event.name has been triggered!', $result[1]);
         $this->assertCount(2, $origin->passedBy);
@@ -281,7 +282,8 @@ class Events extends Unit
         $thirdCallback = function () {
             return 'third bound callback';
         };
-        $eventsHandler->bind('event.name', new AliasedCallback('callback.alias', $thirdCallback), EventsHandler::BINDING_MODE_FIRST);
+        $eventsHandler->bind('event.name', new AliasedCallback('callback.alias', $thirdCallback),
+            EventsHandler::BINDING_MODE_FIRST);
         $listeners = $eventsHandler->getListeners('event.name');
         $this->assertCount(3, $listeners['event.name']);
         $this->assertEquals($thirdCallback, $listeners['event.name'][0]);
@@ -337,7 +339,7 @@ class Events extends Unit
         $fluent = $eventsHandler->unbind('other.event');
         $this->assertSame($eventsHandler, $fluent);
 
-        $this->assertAttributeEmpty('unboundListeners', $eventsHandler);
+        $this->assertEmpty($eventsHandler->getUnboundListeners());
     }
 
     function testCallbacksCanBeUnboundUsingWildcards()
@@ -376,8 +378,9 @@ class Events extends Unit
         $eventsHandler->unbind('any.*');
 
         $this->assertEmpty($eventsHandler->trigger('any.event')->getResults());
-        $this->assertAttributeEquals(['any.*' => ['any.*' => ['listener.alias' => $lambda]]], 'unboundListeners', $eventsHandler);
-        $this->assertAttributeEquals($eventsHandler->getUnboundListeners(), 'unboundListeners', $eventsHandler);
+        $this->assertEquals(['any.*' => ['any.*' => ['listener.alias' => $lambda]]],
+            $eventsHandler->getUnboundListeners());
+        $this->assertEquals($eventsHandler->getUnboundListeners(), $eventsHandler->getUnboundListeners());
     }
 
 
@@ -402,7 +405,8 @@ class Events extends Unit
 
         $unbound = $eventsHandler->unbind('*.any');
 
-        $this->assertEquals(['triggered.callback'], $eventsHandler->trigger('any.event')->getResults()->keys()->toArray());
+        $this->assertEquals(['triggered.callback'],
+            $eventsHandler->trigger('any.event')->getResults()->keys()->toArray());
         $this->assertEmpty($eventsHandler->trigger('any.any')->getResults());
     }
 

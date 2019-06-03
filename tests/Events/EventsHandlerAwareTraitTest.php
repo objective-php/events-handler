@@ -3,7 +3,7 @@
 namespace Tests\ObjectivePHP\Events;
 
 use ObjectivePHP\Events\EventsHandler;
-use ObjectivePHP\Events\EventsHandlerAwareTrait;
+use ObjectivePHP\Events\EventsHandlerAccessors;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -16,7 +16,7 @@ class EventsHandlerAwareTraitTest extends TestCase
     public function testEventsHandlerAccessors()
     {
         $instance = new class {
-            use EventsHandlerAwareTrait;
+            use EventsHandlerAccessors;
         };
 
         $eventsHandler = new EventsHandler();
@@ -30,7 +30,7 @@ class EventsHandlerAwareTraitTest extends TestCase
     public function testEventIsTriggered()
     {
         $instance = new class {
-            use EventsHandlerAwareTrait;
+            use EventsHandlerAccessors;
         };
 
         $eventName = 'event.test';
@@ -47,7 +47,7 @@ class EventsHandlerAwareTraitTest extends TestCase
     public function testEventIsBound()
     {
         $instance = new class {
-            use EventsHandlerAwareTrait;
+            use EventsHandlerAccessors;
         };
 
         $eventName = 'event.test';
@@ -64,7 +64,7 @@ class EventsHandlerAwareTraitTest extends TestCase
     public function testEventIsNotTriggered()
     {
         $instance = new class {
-            use EventsHandlerAwareTrait;
+            use EventsHandlerAccessors;
         };
 
         $eventsHandler = $this->getMockBuilder(EventsHandler::class)->getMock();
@@ -76,7 +76,7 @@ class EventsHandlerAwareTraitTest extends TestCase
     public function testEventIsNotBound()
     {
         $instance = new class {
-            use EventsHandlerAwareTrait;
+            use EventsHandlerAccessors;
         };
 
         $eventsHandler = $this->getMockBuilder(EventsHandler::class)->getMock();

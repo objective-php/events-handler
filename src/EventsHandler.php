@@ -118,7 +118,8 @@ class EventsHandler implements EventsHandlerInterface
                     $callback = new $className;
 
                     if (!is_callable($callback)) {
-                        throw new EventException(sprintf('Class "%s" does not implement __invoke(), thus cannot be used as a callback', $className), EventException::INVALID_CALLBACK);
+                        throw new EventException(sprintf('Class "%s" does not implement __invoke(), thus cannot be used as a callback',
+                            $className), EventException::INVALID_CALLBACK);
                     }
                 }
 
@@ -143,7 +144,9 @@ class EventsHandler implements EventsHandlerInterface
                     // @gdelamarre
                     goto shunt;
                 }
-                if (!is_string($alias)) $i++;
+                if (!is_string($alias)) {
+                    $i++;
+                }
             }
         }
 
@@ -179,7 +182,8 @@ class EventsHandler implements EventsHandlerInterface
             if (!isset ($this->aliases[$alias])) {
                 $this->aliases[$alias] = &$callback;
             } else {
-                throw new EventException(sprintf('Alias "%s" is already bound to another callback', $alias), EventException::INVALID_CALLBACK);
+                throw new EventException(sprintf('Alias "%s" is already bound to another callback', $alias),
+                    EventException::INVALID_CALLBACK);
             }
         } else {
             // check if listener is an alias of a previous listener
@@ -195,7 +199,8 @@ class EventsHandler implements EventsHandlerInterface
 
         // check callback validity
         if (!is_callable($callback) && !$callback instanceof CallbacksAggregate && !class_exists($callback)) {
-            throw new EventException ('Callback must be a callable, an invokable class name, a service reference or a CallbacksAggregate', EventException::INVALID_CALLBACK);
+            throw new EventException ('Callback must be a callable, an invokable class name, a service reference or a CallbacksAggregate',
+                EventException::INVALID_CALLBACK);
         }
 
         if (!isset ($this->listeners [$eventName]) || $mode == self::BINDING_MODE_REPLACE) {
@@ -337,5 +342,6 @@ class EventsHandler implements EventsHandlerInterface
 
         return $this;
     }
+    
 
 }

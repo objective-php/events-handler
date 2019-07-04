@@ -126,7 +126,12 @@ class EventsHandler implements EventsHandlerInterface
                 if (is_object($callback) && $this->getServicesFactory()) {
                     $this->getServicesFactory()->injectDependencies($callback);
                 }
-                $result = $callback($event);
+
+                if($this->getServicesFactory()) {
+                    $result = $this->getServicesFactory()->autorun($callback, [$event]);
+                } else {
+                    $result = $callback($event);
+                }
 
                 // gather exceptions
                 if ($result instanceof \Throwable) {
@@ -342,6 +347,6 @@ class EventsHandler implements EventsHandlerInterface
 
         return $this;
     }
-    
+
 
 }
